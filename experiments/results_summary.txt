@@ -1,0 +1,23 @@
+Experimental results summary
+============================
+
+Number of runs: 100 (Experimental repetitions)
+Joined devices: 300 (Total successful PQC onboarding events)
+Mean join latency (s): 0.031454 (Average onboarding cost)
+Median join latency (s): 0.016996 (Median onboarding cost)
+Min join latency (s): 0.011688 (Fastest onboarding)
+Max join latency (s): 0.093018 (Slowest onboarding)
+Total telemetry records: 12984 (Runtime telemetry dataset size)
+Total detection records: 1638 (AI monitor evaluation samples)
+Quarantine actions: 81 (Total quarantine decisions enforced)
+Mean trigger value: 83.1454 (Average trigger metric value at detection)
+Mean trigger threshold: 70.1852 (Average configured threshold)
+Mean detection delay (s): 8.383 (Average delay between anomaly injection and first quarantine)
+Median detection delay (s): 9.3784 (Median delay between anomaly injection and first quarantine)
+Min detection delay (s): 4.3859 (Fastest anomaly detection delay)
+Max detection delay (s): 9.6238 (Slowest anomaly detection delay)
+
+Ledger event type counts
+------------------------
+quarantine: 2
+telemetry: 98

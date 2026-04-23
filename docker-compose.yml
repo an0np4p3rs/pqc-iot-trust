@@ -1,0 +1,60 @@
+services:
+  ledger:
+    build:
+      context: .
+      dockerfile: ledger/Dockerfile
+    container_name: pqc_ledger
+    ports:
+      - "8003:8000"
+
+  hub:
+    build:
+      context: .
+      dockerfile: hub/Dockerfile
+    container_name: pqc_hub
+    ports:
+      - "8000:8000"
+    environment:
+      LEDGER_URL: http://ledger:8000
+      AI_MONITOR_URL: http://ai_monitor:8000
+      TRUSTED_MANUFACTURER_SIG_ALG: ML-DSA-44
+      TRUSTED_MANUFACTURER_PUBLIC_KEY_B64: ${MANUFACTURER_PUBLIC_KEY_B64}
+      RUN_ID: ${RUN_ID:-run_default}
+    depends_on:
+      - ledger
+
+  ai_monitor:
+    build:
+      context: .
+      dockerfile: ai_monitor/Dockerfile
+    container_name: pqc_ai_monitor
+    ports:
+      - "8002:8000"
+    environment:
+      HUB_URL: http://hub:8000
+      POLL_INTERVAL: "5"
+      RUN_ID: ${RUN_ID:-run_default}
+    volumes:
+      - ./experiments:/app/experiments
+    depends_on:
+      - hub
+
+  device_sim:
+    build:
+      context: .
+      dockerfile: device_sim/Dockerfile
+    container_name: pqc_device_sim
+    environment:
+      HUB_URL: http://hub:8000
+      #DEVICE_COUNT: "3"
+      #RUN_FOREVER: "true"
+      DEVICE_COUNT: ${DEVICE_COUNT:-3}
+      RUN_FOREVER: ${RUN_FOREVER:-false}
+      MANUFACTURER_SIG_ALG: ML-DSA-44
+      MANUFACTURER_PUBLIC_KEY_B64: ${MANUFACTURER_PUBLIC_KEY_B64}
+      MANUFACTURER_SECRET_KEY_B64: ${MANUFACTURER_SECRET_KEY_B64}
+      RUN_ID: ${RUN_ID:-run_default}
+    volumes:
+      - ./experiments:/app/experiments
+    depends_on:
+      - hub
